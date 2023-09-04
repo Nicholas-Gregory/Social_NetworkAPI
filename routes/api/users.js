@@ -22,6 +22,21 @@ router.get('/', async (req, res) => {
     } catch (err) {
         res.status(500).json(err);
     }
+});
+
+// Get a single user by ID
+router.get('/:id', async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.params.id });
+
+        if (!user) {
+            return res.status(404).send("No user with that ID exists");
+        }
+
+        res.json(user);
+    } catch (err) {
+        res.status(500).json(err);
+    }
 })
 
 module.exports = router;

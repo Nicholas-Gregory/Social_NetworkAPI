@@ -37,6 +37,20 @@ router.get('/:id', async (req, res) => {
     } catch (err) {
         res.status(500).json(err);
     }
-})
+});
+
+// Update a user by ID
+router.put('/:id', async (req, res) => {
+    try {
+        const user = await User.findOne({ _id: req.params.id });
+        user.username = req.body.username || user.username;
+        user.email = req.body.email || user.email;
+        await user.save();
+
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
 
 module.exports = router;

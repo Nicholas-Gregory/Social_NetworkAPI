@@ -58,10 +58,35 @@ router.put('/:id', async (req, res) => {
     }
 });
 
+// Delete a user by ID
 router.delete('/:id', async (req, res) => {
     try {
         await User.deleteOne({ _id: req.params.id });
         res.status(200).send("User successfully deleted");
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+// Add a friend to a user
+router.post('/:userId/friends/:friendId', async (req, res) => {
+    const userId = req.params.userId;
+    const friendId = req.params.friendId;
+
+    try {
+        const user = await User.findOne({ _id: userId });
+        const friend = await User.findOne({ _id: friendId });
+
+        if (!user || !friend) {
+            return res.status(404).send("No user with that ID exists");
+        }
+
+        user.friends.push(friend._id);
+        await user.save();
+        res.status(200).json({
+            user,
+            friend
+        });
     } catch (err) {
         res.status(500).json(err);
     }

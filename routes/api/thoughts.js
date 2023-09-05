@@ -82,7 +82,8 @@ router.put('/:id', async (req, res) => {
 // Delete a thought by ID
 router.delete('/:id', async (req, res) => {
     try {
-
+        await Thought.deleteOne({ _id: req.params.id });
+        res.status(200).send("Thought deleted successfully");
     } catch (err) {
         apiError(res, err);
     }

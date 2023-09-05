@@ -19,7 +19,7 @@ const reactionSchema = new Schema({
         default: new Date(),
         get: d => d.toString()
     }
-})
+});
 
 const thoughtSchema = new Schema({
     thoughtText: {

@@ -82,7 +82,7 @@ router.post('/:userId/friends/:friendId', async (req, res) => {
             return res.status(404).send("No user with that ID exists");
         }
 
-        user.friends.push(friend._id);
+        user.friends.addToSet(friend._id);
         await user.save();
         res.status(200).json({
             user,

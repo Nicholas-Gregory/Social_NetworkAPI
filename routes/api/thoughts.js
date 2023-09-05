@@ -89,4 +89,33 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// Add a reaction to a thought
+router.post('/:id/reactions', async (req, res) => {
+    const id = req.params.id;
+    const body = req.body;
+    
+    try {
+        const thought = await Thought.findOne({ _id: id });
+
+        if (!thought) {
+            return res.status(404).send("No thought with that ID exists");
+        }
+
+        const newReactionData = {
+            reactionBody: body.reactionBody,
+            username: body.username
+        }
+        if (thought.reactions) {
+            thought.reactions.push(newReactionData);
+        } else {
+            thought.reactions = [newReactionData]
+        }
+        await thought.save();
+
+        res.status(200).json(thought);
+    } catch (err) {
+        apiError(res, err);
+    }
+});
+
 module.exports = router;

@@ -133,11 +133,10 @@ router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
 
         if (thought.reactions) {
             reaction = thought.reactions
-            .filter(reaction => reaction.reactionId.toString() === reactionId);
-            console.log(reaction);
+            .find(reaction => reaction.reactionId.toString() === reactionId);
         }
-        if (reaction.length > 0) {
-            reaction[0].deleteOne();
+        if (reaction) {
+            reaction.deleteOne();
             await thought.save();
 
             res.status(200).send("Reaction successfully deleted");

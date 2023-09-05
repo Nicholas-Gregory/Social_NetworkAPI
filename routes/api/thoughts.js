@@ -2,6 +2,7 @@ const router = require('express').Router();
 const Thought = require('../../models/Thought');
 const User = require('../../models/User');
 
+// Create a thought
 router.post('/', async (req, res) => {
     const body = req.body;
 
@@ -22,6 +23,16 @@ router.post('/', async (req, res) => {
         await user.save();
 
         res.status(200).json(thought);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
+// Get all thoughts
+router.get('/', async (req, res) => {
+    try {
+        const thoughts = await Thought.find();
+        res.status(200).json(thoughts);
     } catch (err) {
         res.status(500).json(err);
     }

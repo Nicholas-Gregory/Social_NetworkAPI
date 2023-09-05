@@ -90,8 +90,8 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Add a reaction to a thought
-router.post('/:id/reactions', async (req, res) => {
-    const id = req.params.id;
+router.post('/:thoughtId/reactions', async (req, res) => {
+    const id = req.params.thoughtId;
     const body = req.body;
     
     try {
@@ -113,6 +113,37 @@ router.post('/:id/reactions', async (req, res) => {
         await thought.save();
 
         res.status(200).json(thought);
+    } catch (err) {
+        apiError(res, err);
+    }
+});
+
+// Delete a reaction by reactionId
+router.delete('/:thoughtId/reactions/:reactionId', async (req, res) => {
+    const thoughtId = req.params.thoughtId;
+    const reactionId = req.params.reactionId;
+
+    try {
+        const thought = await Thought.findOne({ _id: thoughtId });
+        let reaction;
+
+        if (!thought) {
+            return res.status(404).send("No thought with that ID exists");
+        }
+
+        if (thought.reactions) {
+            reaction = thought.reactions
+            .filter(reaction => reaction.reactionId.toString() === reactionId);
+            console.log(reaction);
+        }
+        if (reaction.length > 0) {
+            reaction[0].deleteOne();
+            await thought.save();
+
+            res.status(200).send("Reaction successfully deleted");
+        } else {
+            res.status(404).send("No reaction with that ID exists");
+        }     
     } catch (err) {
         apiError(res, err);
     }

@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const User = require('../../models/User');
+const { apiError } = require('../../utils');
 
 // Create a user
 router.post('/', async (req, res) => {
@@ -10,7 +11,7 @@ router.post('/', async (req, res) => {
         });
         res.status(200).json(user);
     } catch (err) {
-        res.status(500).json(err);
+        apiError(res, err);
     }
 });
 
@@ -20,7 +21,7 @@ router.get('/', async (req, res) => {
         const users = await User.find();
         res.status(200).json(users);
     } catch (err) {
-        res.status(500).json(err);
+        apiError(res, err);
     }
 });
 
@@ -35,7 +36,7 @@ router.get('/:id', async (req, res) => {
 
         res.json(user);
     } catch (err) {
-        res.status(500).json(err);
+        apiError(res, err);
     }
 });
 
@@ -54,7 +55,7 @@ router.put('/:id', async (req, res) => {
 
         res.status(200).json(user);
     } catch (err) {
-        res.status(500).json(err);
+        apiError(res, err);
     }
 });
 
@@ -64,7 +65,7 @@ router.delete('/:id', async (req, res) => {
         await User.deleteOne({ _id: req.params.id });
         res.status(200).send("User successfully deleted");
     } catch (err) {
-        res.status(500).json(err);
+        apiError(res, err);
     }
 });
 
@@ -88,7 +89,7 @@ router.post('/:userId/friends/:friendId', async (req, res) => {
             friend
         });
     } catch (err) {
-        res.status(500).json(err);
+        apiError(res, err);
     }
 });
 
@@ -109,7 +110,7 @@ router.delete('/:userId/friends/:friendId', async (req, res) => {
 
         res.status(200).send("Friend deleted");
     } catch (err) {
-        res.status(500).json(err);
+        apiError(res, err);
     }
 });
 

@@ -2,6 +2,8 @@ const router = require('express').Router();
 const Thought = require('../../models/Thought');
 const User = require('../../models/User');
 
+const { apiError } = require('../../utils');
+
 // Create a thought
 router.post('/', async (req, res) => {
     const body = req.body;
@@ -24,7 +26,7 @@ router.post('/', async (req, res) => {
 
         res.status(200).json(thought);
     } catch (err) {
-        res.status(500).json(err);
+        apiError(res, err);
     }
 });
 
@@ -34,7 +36,7 @@ router.get('/', async (req, res) => {
         const thoughts = await Thought.find();
         res.status(200).json(thoughts);
     } catch (err) {
-        res.status(500).json(err);
+        apiError(res, err);
     }
 });
 
@@ -51,7 +53,7 @@ router.get('/:id', async (req, res) => {
 
         res.status(200).json(thought);
     } catch (err) {
-        res.status(500).json(err);
+        apiError(res, err);
     }
 });
 
@@ -73,8 +75,16 @@ router.put('/:id', async (req, res) => {
 
         res.status(200).json(thought);
     } catch (err) {
-        console.error(err);
-        res.status(500).json(err);
+        apiError(res, err);
+    }
+});
+
+// Delete a thought by ID
+router.delete('/:id', async (req, res) => {
+    try {
+
+    } catch (err) {
+        apiError(res, err);
     }
 });
 

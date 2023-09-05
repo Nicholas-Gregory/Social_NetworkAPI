@@ -55,4 +55,27 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+// Update a thought by ID
+router.put('/:id', async (req, res) => {
+    const body = req.body;
+    const id = req.params.id;
+
+    try {
+        const thought = await Thought.findOne({ _id: id });
+
+        if (!thought) {
+            return res.status(404).send("No thought with that ID exists");
+        }
+
+        thought.thoughtText = body.thoughtText || thought.thoughtText;
+        thought.username = body.username || thought.username;
+        await thought.save();
+
+        res.status(200).json(thought);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json(err);
+    }
+});
+
 module.exports = router;

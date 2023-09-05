@@ -38,4 +38,21 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Get a single thought by ID
+router.get('/:id', async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const thought = await Thought.findOne({ _id: id });
+
+        if (!thought) {
+            res.status(404).send("No thought with that ID exists");
+        }
+
+        res.status(200).json(thought);
+    } catch (err) {
+        res.status(500).json(err);
+    }
+});
+
 module.exports = router;
